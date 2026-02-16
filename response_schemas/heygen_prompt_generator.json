@@ -1,0 +1,13 @@
+{
+  "agent_name": "HeyGen Prompt Generator Agent",
+  "agent_type": "json",
+  "accessor": "json",
+  "has_module_outputs": false,
+  "schema": {
+    "overall_direction": "string",
+    "scenes": "string",
+    "full_heygen_prompt": "string",
+    "total_duration": "string",
+    "scene_count": "string"
+  }
+}

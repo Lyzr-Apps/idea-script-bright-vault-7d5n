@@ -1,0 +1,42 @@
+{
+  "nodes": [
+    {
+      "id": "input_node",
+      "type": "Input",
+      "label": "Content Idea",
+      "nodeCategory": "input"
+    },
+    {
+      "id": "ugc_script_agent",
+      "type": "Agent",
+      "label": "UGC Script Generator",
+      "nodeCategory": "agent"
+    },
+    {
+      "id": "heygen_prompt_agent",
+      "type": "Agent",
+      "label": "HeyGen Prompt Generator",
+      "nodeCategory": "agent"
+    },
+    {
+      "id": "output_node",
+      "type": "Output",
+      "label": "HeyGen Prompt Output",
+      "nodeCategory": "end"
+    }
+  ],
+  "edges": [
+    {
+      "source": "input_node",
+      "target": "ugc_script_agent"
+    },
+    {
+      "source": "ugc_script_agent",
+      "target": "heygen_prompt_agent"
+    },
+    {
+      "source": "heygen_prompt_agent",
+      "target": "output_node"
+    }
+  ]
+}

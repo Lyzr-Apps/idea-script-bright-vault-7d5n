@@ -1,0 +1,14 @@
+{
+  "agents": {
+    "ugc_script_generator": {
+      "agent_id": "699357fe777b6c1c03678e87",
+      "name": "UGC Script Generator Agent",
+      "type": "independent"
+    },
+    "heygen_prompt_generator": {
+      "agent_id": "699357e6b175ad1ab1aed1ef",
+      "name": "HeyGen Prompt Generator Agent",
+      "type": "independent"
+    }
+  }
+}

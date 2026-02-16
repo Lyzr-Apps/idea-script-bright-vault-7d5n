@@ -1,0 +1,14 @@
+{
+  "agent_name": "UGC Script Generator Agent",
+  "agent_type": "json",
+  "accessor": "json",
+  "has_module_outputs": false,
+  "schema": {
+    "hook": "string",
+    "body": "string",
+    "cta": "string",
+    "title": "string",
+    "estimated_duration": "string",
+    "visual_notes": "string"
+  }
+}

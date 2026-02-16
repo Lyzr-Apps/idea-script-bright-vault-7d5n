@@ -1,0 +1,30 @@
+{
+  "agent_name": "HeyGen Prompt Generator Agent",
+  "agent_id": "699357e6b175ad1ab1aed1ef",
+  "description": "Converts an approved UGC script into a detailed HeyGen Video Agent prompt with scene-by-scene structure, visual style directions (motion graphics, A-roll, B-roll), media type specifications, avatar instructions, duration cues, and color/font guidelines following HeyGen best practices.",
+  "agent_type": "json",
+  "accessor": "result",
+  "auto_generated": true,
+  "response_schema": {
+    "overall_direction": "string",
+    "scenes": "string",
+    "full_heygen_prompt": "string",
+    "total_duration": "string",
+    "scene_count": "string"
+  },
+  "example_response": {
+    "overall_direction": "Overall video direction and style guide",
+    "scenes": "Complete scene-by-scene breakdown with all visual directions, media types, avatar instructions, and timing",
+    "full_heygen_prompt": "The complete ready-to-paste HeyGen Video Agent prompt combining all direction and scenes",
+    "total_duration": "Total estimated video duration",
+    "scene_count": "Total number of scenes"
+  },
+  "has_module_outputs": true,
+  "module_outputs_example": {
+    "artifact_files": [
+      {
+        "file_url": "https://example.com/image.png"
+      }
+    ]
+  }
+}

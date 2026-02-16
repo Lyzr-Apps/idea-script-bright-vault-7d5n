@@ -1,0 +1,24 @@
+{
+  "agent_name": "UGC Script Generator Agent",
+  "agent_id": "699357fe777b6c1c03678e87",
+  "description": "Generates viral UGC/influencer-style scripts for Prompt Architect content (case studies, educational, how-tos, use cases) optimized for social media reels. Produces scripts with hooks, body, and CTAs in conversational influencer tone.",
+  "agent_type": "json",
+  "accessor": "result",
+  "auto_generated": true,
+  "response_schema": {
+    "hook": "string",
+    "body": "string",
+    "cta": "string",
+    "title": "string",
+    "estimated_duration": "string",
+    "visual_notes": "string"
+  },
+  "example_response": {
+    "hook": "The hook section of the script (first 3 seconds)",
+    "body": "The body section of the script (main content)",
+    "cta": "The call-to-action section",
+    "title": "A short title for the script",
+    "estimated_duration": "Estimated read time in seconds",
+    "visual_notes": "Visual direction notes for the creator"
+  }
+}
