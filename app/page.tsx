@@ -107,10 +107,10 @@ const SAMPLE_HISTORY: HistoryItem[] = [
 ]
 
 // ─── Markdown Renderer ─────────────────────────────────────────────────────────
-function formatInline(text: unknown) {
+function formatInline(text: unknown): React.ReactNode {
   const str = typeof text === 'string' ? text : String(text ?? '')
   const parts = str.split(/\*\*(.*?)\*\*/g)
-  if (parts.length === 1) return text
+  if (parts.length === 1) return str
   return parts.map((part, i) =>
     i % 2 === 1 ? (
       <strong key={i} className="font-semibold">
