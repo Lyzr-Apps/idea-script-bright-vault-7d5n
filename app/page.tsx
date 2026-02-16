@@ -112,8 +112,9 @@ const SAMPLE_HISTORY: HistoryItem[] = [
 ]
 
 // ─── Markdown Renderer ─────────────────────────────────────────────────────────
-function formatInline(text: string) {
-  const parts = text.split(/\*\*(.*?)\*\*/g)
+function formatInline(text: unknown) {
+  const str = typeof text === 'string' ? text : String(text ?? '')
+  const parts = str.split(/\*\*(.*?)\*\*/g)
   if (parts.length === 1) return text
   return parts.map((part, i) =>
     i % 2 === 1 ? (
@@ -126,11 +127,13 @@ function formatInline(text: string) {
   )
 }
 
-function renderMarkdown(text: string) {
+function renderMarkdown(text: unknown) {
   if (!text) return null
+  const str = typeof text === 'string' ? text : JSON.stringify(text, null, 2)
+  if (!str) return null
   return (
     <div className="space-y-2">
-      {text.split('\n').map((line, i) => {
+      {str.split('\n').map((line, i) => {
         if (line.startsWith('### '))
           return (
             <h4 key={i} className="font-semibold text-sm mt-3 mb-1">
