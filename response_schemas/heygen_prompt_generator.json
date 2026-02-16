@@ -1,12 +1,10 @@
 {
-  "agent_name": "HeyGen Prompt Generator Agent",
+  "agent_name": "HeyGen Video Script Agent",
   "agent_type": "json",
   "accessor": "json",
   "has_module_outputs": false,
   "schema": {
-    "overall_direction": "string",
-    "scenes": "string",
-    "full_heygen_prompt": "string",
+    "video_script": "string",
     "total_duration": "string",
     "scene_count": "string"
   }

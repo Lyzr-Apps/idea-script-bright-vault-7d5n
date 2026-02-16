@@ -28,6 +28,8 @@ import {
   FiChevronUp,
   FiLoader,
   FiRefreshCw,
+  FiMessageSquare,
+  FiSend,
 } from 'react-icons/fi'
 
 // ─── Agent IDs ─────────────────────────────────────────────────────────────────
@@ -41,13 +43,10 @@ interface ScriptData {
   cta: string
   title: string
   estimated_duration: string
-  visual_notes: string
 }
 
-interface PromptData {
-  overall_direction: string
-  scenes: string
-  full_heygen_prompt: string
+interface VideoScriptData {
+  video_script: string
   total_duration: string
   scene_count: string
 }
@@ -58,7 +57,7 @@ interface HistoryItem {
   contentType: string
   notes: string
   scriptData: ScriptData | null
-  promptData: PromptData | null
+  promptData: VideoScriptData | null
   status: 'draft' | 'approved' | 'prompt_generated'
   createdAt: string
 }
@@ -70,13 +69,10 @@ const SAMPLE_SCRIPT: ScriptData = {
   body: 'So I found this tool called Prompt Architect, and honestly, it blew my mind. I literally typed in what I wanted -- a customer support chatbot -- hit generate, and boom. It gave me a working app with a clean UI, connected to an AI agent, ready to deploy. No backend setup, no API headaches, no config files. Just describe your idea and it builds the whole thing. The AI handles the logic, the routing, everything. I even customized the look in like 10 seconds.',
   cta: 'Link is in my bio. Go try Prompt Architect right now -- you will thank me later. Drop a comment if you build something cool!',
   estimated_duration: '45-55 seconds',
-  visual_notes: 'Start with a surprised face close-up. Screen record the Prompt Architect flow. Use quick cuts between typing and the generated app. End with pointing gesture toward bio link.',
 }
 
-const SAMPLE_PROMPT: PromptData = {
-  overall_direction: 'Fast-paced, energetic UGC-style video. Bright, modern color palette with orange and white tones. Avatar should feel approachable and excited. Mix of talking-head A-roll with screen recordings as B-roll.',
-  scenes: 'Scene 1 (0-3s): Hook -- Avatar close-up, surprised expression, text overlay "Build an AI App in 60s?"\nScene 2 (3-15s): Show screen recording of Prompt Architect landing page, avatar voiceover describing the discovery\nScene 3 (15-35s): Split screen -- avatar on left, screen recording on right showing the build process step by step\nScene 4 (35-45s): Quick montage of the finished app, zoom into UI details\nScene 5 (45-55s): Avatar back on screen, pointing gesture, CTA text overlay with link',
-  full_heygen_prompt: 'Create a 55-second UGC-style video with an enthusiastic tech creator avatar. The video follows a "discovery" narrative arc.\n\nVisual Style: Bright, warm lighting. Modern minimalist background. Text overlays in bold sans-serif font.\n\nScene 1 (Hook, 0-3s): Close-up of avatar with surprised expression. Bold text overlay: "Build an AI App in 60s?" Motion: slight zoom in.\n\nScene 2 (Discovery, 3-15s): Avatar speaks with excitement while B-roll shows Prompt Architect website. Screen recording: landing page, feature highlights.\n\nScene 3 (Demo, 15-35s): Split-screen layout. Left: avatar narrating. Right: screen recording of typing a prompt and watching the app generate. Key moments: typing the idea, hitting generate, seeing the result.\n\nScene 4 (Result, 35-45s): Full-screen montage of the generated app UI. Quick cuts showing different screens. Subtle zoom effects on key features.\n\nScene 5 (CTA, 45-55s): Back to avatar, pointing down/right. Text overlay: "Link in bio" with arrow animation. Warm smile, direct eye contact.\n\nAudio: Upbeat background music at 20% volume. Clear voice narration throughout.',
+const SAMPLE_PROMPT: VideoScriptData = {
+  video_script: 'SCENE 1 - HOOK (0-3s)\n[Close-up shot, surprised expression]\nAvatar: "Wait -- you can build a FULL AI app without writing a single line of code?"\n[Text overlay: "Build an AI App in 60s?"]\n[Motion: slight zoom in]\n\nSCENE 2 - DISCOVERY (3-15s)\n[Screen recording: Prompt Architect landing page]\nAvatar (voiceover): "So I found this tool called Prompt Architect, and honestly, it blew my mind. I literally typed in what I wanted -- a customer support chatbot -- hit generate..."\n[Show: typing prompt into the tool]\n\nSCENE 3 - DEMO (15-35s)\n[Split screen: avatar left, screen recording right]\nAvatar: "...and boom. It gave me a working app with a clean UI, connected to an AI agent, ready to deploy. No backend setup, no API headaches, no config files."\n[Show: step-by-step build process, generated app appearing]\n\nSCENE 4 - RESULT (35-45s)\n[Full-screen montage of generated app UI]\n[Quick cuts between different screens and features]\nAvatar (voiceover): "Just describe your idea and it builds the whole thing. The AI handles the logic, the routing, everything. I even customized the look in like 10 seconds."\n\nSCENE 5 - CTA (45-55s)\n[Back to avatar, pointing gesture]\nAvatar: "Link is in my bio. Go try Prompt Architect right now -- you will thank me later. Drop a comment if you build something cool!"\n[Text overlay: "Link in bio" with arrow]\n[Background music: upbeat, 20% volume throughout]',
   total_duration: '55 seconds',
   scene_count: '5',
 }
@@ -103,7 +99,6 @@ const SAMPLE_HISTORY: HistoryItem[] = [
       body: 'They were a 10-person SaaS company getting 500+ tickets a day. Their support team was burned out. Then they tried Prompt Architect to build an AI agent that handles tier-1 support automatically...',
       cta: 'Want the same results? Check the link in bio for Prompt Architect.',
       estimated_duration: '40-50 seconds',
-      visual_notes: 'Use dramatic before/after visuals. Show ticket dashboard numbers going down.',
     },
     promptData: null,
     status: 'approved',
@@ -231,21 +226,13 @@ function PromptSkeleton() {
         <Skeleton className="h-6 w-1/3" />
         <Skeleton className="h-8 w-28 rounded-[0.875rem]" />
       </div>
-      <div>
-        <Skeleton className="h-5 w-40 mb-2" />
-        <Skeleton className="h-24 w-full" />
-      </div>
-      <div>
-        <Skeleton className="h-5 w-36 mb-2" />
-        <Skeleton className="h-40 w-full" />
-      </div>
-      <div>
-        <Skeleton className="h-5 w-44 mb-2" />
-        <Skeleton className="h-60 w-full" />
-      </div>
       <div className="flex gap-3">
         <Skeleton className="h-6 w-24 rounded-full" />
         <Skeleton className="h-6 w-20 rounded-full" />
+      </div>
+      <div>
+        <Skeleton className="h-5 w-40 mb-2" />
+        <Skeleton className="h-60 w-full" />
       </div>
     </div>
   )
@@ -327,8 +314,8 @@ function AgentInfoPanel({ activeAgentId }: { activeAgentId: string | null }) {
     },
     {
       id: HEYGEN_AGENT_ID,
-      name: 'HeyGen Prompt Generator',
-      purpose: 'Converts approved scripts into HeyGen video prompts',
+      name: 'HeyGen Video Script Agent',
+      purpose: 'Converts approved scripts into production-ready HeyGen video scripts',
     },
   ]
 
@@ -373,7 +360,7 @@ function TabNav({
 }) {
   const tabs = [
     { id: 'studio' as const, label: 'Script Studio', icon: <FiEdit3 size={16} /> },
-    { id: 'prompt' as const, label: 'Prompt Output', icon: <FiVideo size={16} /> },
+    { id: 'prompt' as const, label: 'Video Script', icon: <FiVideo size={16} /> },
     { id: 'history' as const, label: 'History', icon: <FiClock size={16} /> },
   ]
 
@@ -418,6 +405,10 @@ function StudioTab({
   scriptStatus,
   onApprove,
   errorMessage,
+  revisionInput,
+  setRevisionInput,
+  isRevising,
+  onRevise,
 }: {
   contentIdea: string
   setContentIdea: (v: string) => void
@@ -437,6 +428,10 @@ function StudioTab({
   scriptStatus: 'draft' | 'approved'
   onApprove: () => void
   errorMessage: string
+  revisionInput: string
+  setRevisionInput: (v: string) => void
+  isRevising: boolean
+  onRevise: () => void
 }) {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-full">
@@ -562,15 +557,54 @@ function StudioTab({
                   readOnly={scriptStatus === 'approved'}
                 />
 
-                {/* Visual Notes */}
-                {scriptData.visual_notes && (
-                  <div className="rounded-[0.875rem] bg-muted/60 border border-border/50 p-4">
-                    <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1.5">
-                      Visual Notes
+                {/* Revision Chat Box - only when draft and script exists */}
+                {scriptStatus === 'draft' && (
+                  <div className="rounded-[0.875rem] border border-border/60 bg-muted/30 p-4 space-y-3">
+                    <div className="flex items-center gap-2 text-sm font-semibold text-foreground/80 tracking-tight">
+                      <FiMessageSquare size={15} className="text-primary" />
+                      <span>Revise Script</span>
+                    </div>
+                    <p className="text-xs text-muted-foreground leading-relaxed">
+                      Tell the AI how to improve the script. For example: "make the hook stronger", "shorten the body", or "change the CTA to mention a discount".
                     </p>
-                    <p className="text-sm text-foreground/80 leading-relaxed">
-                      {scriptData.visual_notes}
-                    </p>
+                    <div className="flex gap-2">
+                      <input
+                        type="text"
+                        value={revisionInput}
+                        onChange={(e) => setRevisionInput(e.target.value)}
+                        placeholder="Type your revision feedback..."
+                        disabled={isRevising}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' && !e.shiftKey && revisionInput.trim() && !isRevising) {
+                            e.preventDefault()
+                            onRevise()
+                          }
+                        }}
+                        className="flex-1 rounded-[0.625rem] border border-border bg-background/60 px-3.5 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/40 transition-all"
+                      />
+                      <button
+                        onClick={onRevise}
+                        disabled={!revisionInput.trim() || isRevising}
+                        className={cn(
+                          'flex items-center gap-2 px-4 py-2.5 rounded-[0.625rem] text-sm font-medium transition-all duration-200',
+                          !revisionInput.trim() || isRevising
+                            ? 'bg-muted text-muted-foreground cursor-not-allowed'
+                            : 'bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm'
+                        )}
+                      >
+                        {isRevising ? (
+                          <>
+                            <FiLoader className="animate-spin" size={14} />
+                            <span>Revising...</span>
+                          </>
+                        ) : (
+                          <>
+                            <FiSend size={14} />
+                            <span>Revise</span>
+                          </>
+                        )}
+                      </button>
+                    </div>
                   </div>
                 )}
 
@@ -578,7 +612,13 @@ function StudioTab({
                 {scriptStatus === 'draft' && (
                   <button
                     onClick={onApprove}
-                    className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-[0.875rem] bg-emerald-600 text-white text-sm font-medium hover:bg-emerald-700 transition-all duration-200 shadow-sm hover:shadow-md"
+                    disabled={isRevising}
+                    className={cn(
+                      'w-full flex items-center justify-center gap-2 px-5 py-3 rounded-[0.875rem] text-sm font-medium transition-all duration-200 shadow-sm hover:shadow-md',
+                      isRevising
+                        ? 'bg-muted text-muted-foreground cursor-not-allowed'
+                        : 'bg-emerald-600 text-white hover:bg-emerald-700'
+                    )}
                   >
                     <FiCheck size={16} />
                     <span>Approve Script</span>
@@ -606,8 +646,8 @@ function StudioTab({
   )
 }
 
-// ─── Prompt Tab ─────────────────────────────────────────────────────────────────
-function PromptTab({
+// ─── Video Script Tab ───────────────────────────────────────────────────────────
+function VideoScriptTab({
   scriptData,
   scriptStatus,
   editableHook,
@@ -615,7 +655,7 @@ function PromptTab({
   editableCta,
   isGenerating,
   onGenerate,
-  promptData,
+  videoScriptData,
   copied,
   onCopy,
   onGoToStudio,
@@ -628,7 +668,7 @@ function PromptTab({
   editableCta: string
   isGenerating: boolean
   onGenerate: () => void
-  promptData: PromptData | null
+  videoScriptData: VideoScriptData | null
   copied: boolean
   onCopy: () => void
   onGoToStudio: () => void
@@ -648,7 +688,7 @@ function PromptTab({
             No Approved Script
           </h3>
           <p className="text-sm text-muted-foreground mb-6 max-w-sm mx-auto leading-relaxed">
-            Approve a script first to generate a HeyGen prompt. Head to Script Studio to create and approve a script.
+            Approve a script first to generate a HeyGen video script. Head to Script Studio to create and approve a script.
           </p>
           <button
             onClick={onGoToStudio}
@@ -707,16 +747,6 @@ function PromptTab({
                 value={editableCta}
                 readOnly
               />
-              {scriptData?.visual_notes && (
-                <div className="rounded-[0.875rem] bg-muted/60 border border-border/50 p-4">
-                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1.5">
-                    Visual Notes
-                  </p>
-                  <p className="text-sm text-foreground/80 leading-relaxed">
-                    {scriptData.visual_notes}
-                  </p>
-                </div>
-              )}
             </div>
           </CollapsibleContent>
         </GlassCard>
@@ -737,12 +767,12 @@ function PromptTab({
           {isGenerating ? (
             <>
               <FiLoader className="animate-spin" size={18} />
-              <span>Generating HeyGen Prompt...</span>
+              <span>Generating Video Script...</span>
             </>
           ) : (
             <>
               <FiFilm size={18} />
-              <span>Generate HeyGen Prompt</span>
+              <span>Generate HeyGen Video Script</span>
             </>
           )}
         </button>
@@ -754,19 +784,19 @@ function PromptTab({
         </div>
       )}
 
-      {/* Prompt Output */}
+      {/* Video Script Output */}
       {isGenerating ? (
         <GlassCard>
           <PromptSkeleton />
         </GlassCard>
-      ) : promptData ? (
+      ) : videoScriptData ? (
         <GlassCard className="overflow-hidden">
           <ScrollArea className="h-[calc(100vh-460px)] min-h-[400px]">
-            <div className="p-6 space-y-6">
+            <div className="p-6 space-y-5">
               {/* Header with Copy */}
               <div className="flex items-center justify-between">
                 <h3 className="font-serif font-bold text-lg text-foreground tracking-tight">
-                  HeyGen Video Prompt
+                  HeyGen Video Script
                 </h3>
                 <button
                   onClick={onCopy}
@@ -784,51 +814,22 @@ function PromptTab({
 
               {/* Duration & Scene Count Badges */}
               <div className="flex gap-3">
-                {promptData.total_duration && (
+                {videoScriptData.total_duration && (
                   <Badge variant="outline" className="text-xs">
-                    Duration: {promptData.total_duration}
+                    Duration: {videoScriptData.total_duration}
                   </Badge>
                 )}
-                {promptData.scene_count && (
+                {videoScriptData.scene_count && (
                   <Badge variant="outline" className="text-xs">
-                    Scenes: {promptData.scene_count}
+                    Scenes: {videoScriptData.scene_count}
                   </Badge>
                 )}
               </div>
 
-              {/* Overall Direction */}
-              {promptData.overall_direction && (
-                <div>
-                  <h4 className="text-sm font-semibold text-primary mb-2 tracking-tight">
-                    Overall Direction
-                  </h4>
-                  <div className="text-sm text-foreground/85 leading-relaxed">
-                    {renderMarkdown(promptData.overall_direction)}
-                  </div>
-                </div>
-              )}
-
-              {/* Scene Breakdown */}
-              {promptData.scenes && (
-                <div>
-                  <h4 className="text-sm font-semibold text-primary mb-2 tracking-tight">
-                    Scene Breakdown
-                  </h4>
-                  <div className="text-sm text-foreground/85 leading-relaxed">
-                    {renderMarkdown(promptData.scenes)}
-                  </div>
-                </div>
-              )}
-
-              {/* Full HeyGen Prompt */}
-              {promptData.full_heygen_prompt && (
-                <div>
-                  <h4 className="text-sm font-semibold text-primary mb-2 tracking-tight">
-                    Full HeyGen Prompt
-                  </h4>
-                  <div className="rounded-[0.875rem] bg-muted/60 border border-border/50 p-4 font-mono text-sm text-foreground/85 leading-relaxed whitespace-pre-wrap">
-                    {promptData.full_heygen_prompt}
-                  </div>
+              {/* Video Script Text */}
+              {videoScriptData.video_script && (
+                <div className="rounded-[0.875rem] bg-muted/60 border border-border/50 p-4 font-mono text-sm text-foreground/85 leading-relaxed whitespace-pre-wrap">
+                  {videoScriptData.video_script}
                 </div>
               )}
             </div>
@@ -887,7 +888,7 @@ function HistoryTab({
       case 'prompt_generated':
         return (
           <Badge className="bg-blue-100 text-blue-700 border-blue-200 hover:bg-blue-100 text-[11px]">
-            Prompt Generated
+            Video Script Generated
           </Badge>
         )
       case 'approved':
@@ -1008,13 +1009,25 @@ function HistoryTab({
                       <p className="pt-4 text-sm text-muted-foreground">No script data.</p>
                     )}
 
-                    {item.promptData?.full_heygen_prompt && (
+                    {item.promptData?.video_script && (
                       <div className="space-y-2">
                         <h4 className="font-semibold text-sm text-primary tracking-tight">
-                          HeyGen Prompt
+                          HeyGen Video Script
                         </h4>
+                        <div className="flex gap-2 mb-2">
+                          {item.promptData?.total_duration && (
+                            <Badge variant="outline" className="text-[10px]">
+                              {item.promptData.total_duration}
+                            </Badge>
+                          )}
+                          {item.promptData?.scene_count && (
+                            <Badge variant="outline" className="text-[10px]">
+                              {item.promptData.scene_count} scenes
+                            </Badge>
+                          )}
+                        </div>
                         <div className="rounded-[0.875rem] bg-muted/60 border border-border/50 p-3 font-mono text-xs text-foreground/85 leading-relaxed whitespace-pre-wrap max-h-48 overflow-y-auto">
-                          {item.promptData.full_heygen_prompt}
+                          {item.promptData.video_script}
                         </div>
                       </div>
                     )}
@@ -1065,9 +1078,13 @@ export default function Page() {
   const [editableCta, setEditableCta] = useState('')
   const [scriptStatus, setScriptStatus] = useState<'draft' | 'approved'>('draft')
 
-  // ── Prompt Output State ────────────────────────────────────────────────────
+  // ── Revision State ─────────────────────────────────────────────────────────
+  const [revisionInput, setRevisionInput] = useState('')
+  const [isRevising, setIsRevising] = useState(false)
+
+  // ── Video Script Output State ──────────────────────────────────────────────
   const [isGeneratingPrompt, setIsGeneratingPrompt] = useState(false)
-  const [promptData, setPromptData] = useState<PromptData | null>(null)
+  const [videoScriptData, setVideoScriptData] = useState<VideoScriptData | null>(null)
   const [copied, setCopied] = useState(false)
   const [promptErrorMessage, setPromptErrorMessage] = useState('')
 
@@ -1104,8 +1121,10 @@ export default function Page() {
       setEditableBody(SAMPLE_SCRIPT.body)
       setEditableCta(SAMPLE_SCRIPT.cta)
       setScriptStatus('approved')
-      setPromptData(SAMPLE_PROMPT)
+      setVideoScriptData(SAMPLE_PROMPT)
       setHistory(SAMPLE_HISTORY)
+      setRevisionInput('')
+      setIsRevising(false)
     } else {
       setContentIdea('')
       setContentType('General')
@@ -1115,7 +1134,9 @@ export default function Page() {
       setEditableBody('')
       setEditableCta('')
       setScriptStatus('draft')
-      setPromptData(null)
+      setVideoScriptData(null)
+      setRevisionInput('')
+      setIsRevising(false)
       // Restore real history
       try {
         const stored = localStorage.getItem('ugc_pipeline_history')
@@ -1150,6 +1171,28 @@ export default function Page() {
     [showSample]
   )
 
+  // ── Parse Script Response Helper ───────────────────────────────────────────
+  const parseScriptResponse = (data: Record<string, unknown> | string | null | undefined): ScriptData | null => {
+    if (!data) return null
+    let parsed = data
+    if (typeof parsed === 'string') {
+      try {
+        parsed = JSON.parse(parsed)
+      } catch {
+        return null
+      }
+    }
+    if (typeof parsed !== 'object' || parsed === null) return null
+    const obj = parsed as Record<string, unknown>
+    return {
+      hook: typeof obj?.hook === 'string' ? obj.hook : '',
+      body: typeof obj?.body === 'string' ? obj.body : '',
+      cta: typeof obj?.cta === 'string' ? obj.cta : '',
+      title: typeof obj?.title === 'string' ? obj.title : 'Untitled Script',
+      estimated_duration: typeof obj?.estimated_duration === 'string' ? obj.estimated_duration : '',
+    }
+  }
+
   // ── Generate Script ────────────────────────────────────────────────────────
   const handleGenerateScript = async () => {
     if (!contentIdea.trim() || isGeneratingScript) return
@@ -1158,7 +1201,8 @@ export default function Page() {
     setScriptData(null)
     setScriptStatus('draft')
     setScriptErrorMessage('')
-    setPromptData(null)
+    setVideoScriptData(null)
+    setRevisionInput('')
     setActiveAgentId(SCRIPT_AGENT_ID)
 
     const message = `Content Type: ${contentType}\n\nContent Idea: ${contentIdea}${notes ? `\n\nAdditional Notes: ${notes}` : ''}`
@@ -1167,34 +1211,60 @@ export default function Page() {
       const result = await callAIAgent(message, SCRIPT_AGENT_ID)
 
       if (result.success) {
-        let data = result?.response?.result
-        if (typeof data === 'string') {
-          try {
-            data = JSON.parse(data)
-          } catch {
-            // leave as is
-          }
+        const data = result?.response?.result
+        const parsed = parseScriptResponse(data as Record<string, unknown> | string)
+        if (parsed) {
+          setScriptData(parsed)
+          setEditableHook(parsed.hook)
+          setEditableBody(parsed.body)
+          setEditableCta(parsed.cta)
+        } else {
+          setScriptErrorMessage('Could not parse script response. Please try again.')
         }
-        const parsed: ScriptData = {
-          hook: data?.hook ?? '',
-          body: data?.body ?? '',
-          cta: data?.cta ?? '',
-          title: data?.title ?? 'Untitled Script',
-          estimated_duration: data?.estimated_duration ?? '',
-          visual_notes: data?.visual_notes ?? '',
-        }
-        setScriptData(parsed)
-        setEditableHook(parsed.hook)
-        setEditableBody(parsed.body)
-        setEditableCta(parsed.cta)
       } else {
         setScriptErrorMessage(result?.error ?? 'Failed to generate script. Please try again.')
       }
-    } catch (err) {
+    } catch {
       setScriptErrorMessage('An unexpected error occurred. Please try again.')
     }
 
     setIsGeneratingScript(false)
+    setActiveAgentId(null)
+  }
+
+  // ── Revise Script ──────────────────────────────────────────────────────────
+  const handleReviseScript = async () => {
+    if (!revisionInput.trim() || isRevising || !scriptData) return
+
+    setIsRevising(true)
+    setScriptErrorMessage('')
+    setActiveAgentId(SCRIPT_AGENT_ID)
+
+    const message = `REVISION REQUEST\n\nCurrent Script:\nTitle: ${scriptData.title}\nHook: ${editableHook}\nBody: ${editableBody}\nCTA: ${editableCta}\n\nUser Feedback: ${revisionInput}\n\nPlease revise the script based on the feedback above. Keep the same JSON output format.`
+
+    try {
+      const result = await callAIAgent(message, SCRIPT_AGENT_ID)
+
+      if (result.success) {
+        const data = result?.response?.result
+        const parsed = parseScriptResponse(data as Record<string, unknown> | string)
+        if (parsed) {
+          setScriptData(parsed)
+          setEditableHook(parsed.hook)
+          setEditableBody(parsed.body)
+          setEditableCta(parsed.cta)
+          setRevisionInput('')
+        } else {
+          setScriptErrorMessage('Could not parse revised script response. Please try again.')
+        }
+      } else {
+        setScriptErrorMessage(result?.error ?? 'Failed to revise script. Please try again.')
+      }
+    } catch {
+      setScriptErrorMessage('An unexpected error occurred during revision. Please try again.')
+    }
+
+    setIsRevising(false)
     setActiveAgentId(null)
   }
 
@@ -1210,6 +1280,7 @@ export default function Page() {
     }
     setScriptData(updatedScript)
     setScriptStatus('approved')
+    setRevisionInput('')
 
     // Save to history
     const historyItem: HistoryItem = {
@@ -1225,20 +1296,20 @@ export default function Page() {
     const updated = [historyItem, ...history]
     saveHistory(updated)
 
-    // Switch to prompt tab
+    // Switch to video script tab
     setActiveTab('prompt')
   }
 
-  // ── Generate HeyGen Prompt ─────────────────────────────────────────────────
+  // ── Generate HeyGen Video Script ───────────────────────────────────────────
   const handleGeneratePrompt = async () => {
     if (!scriptData || scriptStatus !== 'approved' || isGeneratingPrompt) return
 
     setIsGeneratingPrompt(true)
-    setPromptData(null)
+    setVideoScriptData(null)
     setPromptErrorMessage('')
     setActiveAgentId(HEYGEN_AGENT_ID)
 
-    const approvedScript = `Title: ${scriptData.title}\n\nHOOK:\n${editableHook}\n\nBODY:\n${editableBody}\n\nCTA:\n${editableCta}\n\nVisual Notes:\n${scriptData.visual_notes ?? ''}\n\nEstimated Duration: ${scriptData.estimated_duration ?? ''}`
+    const approvedScript = `Title: ${scriptData.title}\n\nHOOK:\n${editableHook}\n\nBODY:\n${editableBody}\n\nCTA:\n${editableCta}\n\nEstimated Duration: ${scriptData.estimated_duration ?? ''}`
 
     try {
       const result = await callAIAgent(approvedScript, HEYGEN_AGENT_ID)
@@ -1252,14 +1323,13 @@ export default function Page() {
             // leave as is
           }
         }
-        const parsed: PromptData = {
-          overall_direction: data?.overall_direction ?? '',
-          scenes: data?.scenes ?? '',
-          full_heygen_prompt: data?.full_heygen_prompt ?? '',
-          total_duration: data?.total_duration ?? '',
-          scene_count: data?.scene_count ?? '',
+        const dataObj = data as Record<string, unknown> | undefined
+        const parsed: VideoScriptData = {
+          video_script: typeof dataObj?.video_script === 'string' ? dataObj.video_script : '',
+          total_duration: typeof dataObj?.total_duration === 'string' ? dataObj.total_duration : '',
+          scene_count: typeof dataObj?.scene_count === 'string' ? dataObj.scene_count : '',
         }
-        setPromptData(parsed)
+        setVideoScriptData(parsed)
 
         // Update history entry
         const updatedHistory = history.map((item) => {
@@ -1273,7 +1343,7 @@ export default function Page() {
         })
         saveHistory(updatedHistory)
       } else {
-        setPromptErrorMessage(result?.error ?? 'Failed to generate prompt. Please try again.')
+        setPromptErrorMessage(result?.error ?? 'Failed to generate video script. Please try again.')
       }
     } catch {
       setPromptErrorMessage('An unexpected error occurred. Please try again.')
@@ -1285,8 +1355,8 @@ export default function Page() {
 
   // ── Copy to Clipboard ──────────────────────────────────────────────────────
   const handleCopy = async () => {
-    if (!promptData?.full_heygen_prompt) return
-    const success = await copyToClipboard(promptData.full_heygen_prompt)
+    if (!videoScriptData?.video_script) return
+    const success = await copyToClipboard(videoScriptData.video_script)
     if (success) {
       setCopied(true)
       setTimeout(() => setCopied(false), 2000)
@@ -1303,7 +1373,8 @@ export default function Page() {
     setEditableBody('')
     setEditableCta('')
     setScriptStatus('draft')
-    setPromptData(null)
+    setVideoScriptData(null)
+    setRevisionInput('')
     setActiveTab('studio')
   }
 
@@ -1329,7 +1400,7 @@ export default function Page() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
           <div className="flex items-center gap-6">
             <h1 className="font-serif font-bold text-xl text-foreground tracking-tight">
-              UGC Pipeline
+              Architect UGC Video Maker
             </h1>
             <TabNav activeTab={activeTab} onTabChange={setActiveTab} />
           </div>
@@ -1362,11 +1433,15 @@ export default function Page() {
             scriptStatus={scriptStatus}
             onApprove={handleApproveScript}
             errorMessage={scriptErrorMessage}
+            revisionInput={revisionInput}
+            setRevisionInput={setRevisionInput}
+            isRevising={isRevising}
+            onRevise={handleReviseScript}
           />
         )}
 
         {activeTab === 'prompt' && (
-          <PromptTab
+          <VideoScriptTab
             scriptData={scriptData}
             scriptStatus={scriptStatus}
             editableHook={editableHook}
@@ -1374,7 +1449,7 @@ export default function Page() {
             editableCta={editableCta}
             isGenerating={isGeneratingPrompt}
             onGenerate={handleGeneratePrompt}
-            promptData={promptData}
+            videoScriptData={videoScriptData}
             copied={copied}
             onCopy={handleCopy}
             onGoToStudio={() => setActiveTab('studio')}

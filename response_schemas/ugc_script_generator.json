@@ -4,11 +4,10 @@
   "accessor": "json",
   "has_module_outputs": false,
   "schema": {
+    "title": "string",
     "hook": "string",
     "body": "string",
     "cta": "string",
-    "title": "string",
-    "estimated_duration": "string",
-    "visual_notes": "string"
+    "estimated_duration": "string"
   }
 }
