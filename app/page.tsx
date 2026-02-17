@@ -66,13 +66,13 @@ interface HistoryItem {
 const SAMPLE_SCRIPT: ScriptData = {
   title: 'Build an AI App in 60 Seconds',
   hook: 'Wait -- you can build a FULL AI app without writing a single line of code? Let me show you how I did it in under a minute.',
-  body: 'So I found this tool called Prompt Architect, and honestly, it blew my mind. I literally typed in what I wanted -- a customer support chatbot -- hit generate, and boom. It gave me a working app with a clean UI, connected to an AI agent, ready to deploy. No backend setup, no API headaches, no config files. Just describe your idea and it builds the whole thing. The AI handles the logic, the routing, everything. I even customized the look in like 10 seconds.',
-  cta: 'Link is in my bio. Go try Prompt Architect right now -- you will thank me later. Drop a comment if you build something cool!',
+  body: 'So I found this tool called Architect, and honestly, it blew my mind. I literally typed in what I wanted -- a customer support chatbot -- hit generate, and boom. It gave me a working app with a clean UI, connected to an AI agent, ready to deploy. No backend setup, no API headaches, no config files. Just describe your idea and it builds the whole thing. The AI handles the logic, the routing, everything. I even customized the look in like 10 seconds.',
+  cta: 'Link is in my bio. Go try Architect right now -- you will thank me later. Drop a comment if you build something cool!',
   estimated_duration: '45-55 seconds',
 }
 
 const SAMPLE_PROMPT: VideoScriptData = {
-  video_script: 'SCENE 1 - HOOK (0-3s)\n[Close-up shot, surprised expression]\nAvatar: "Wait -- you can build a FULL AI app without writing a single line of code?"\n[Text overlay: "Build an AI App in 60s?"]\n[Motion: slight zoom in]\n\nSCENE 2 - DISCOVERY (3-15s)\n[Screen recording: Prompt Architect landing page]\nAvatar (voiceover): "So I found this tool called Prompt Architect, and honestly, it blew my mind. I literally typed in what I wanted -- a customer support chatbot -- hit generate..."\n[Show: typing prompt into the tool]\n\nSCENE 3 - DEMO (15-35s)\n[Split screen: avatar left, screen recording right]\nAvatar: "...and boom. It gave me a working app with a clean UI, connected to an AI agent, ready to deploy. No backend setup, no API headaches, no config files."\n[Show: step-by-step build process, generated app appearing]\n\nSCENE 4 - RESULT (35-45s)\n[Full-screen montage of generated app UI]\n[Quick cuts between different screens and features]\nAvatar (voiceover): "Just describe your idea and it builds the whole thing. The AI handles the logic, the routing, everything. I even customized the look in like 10 seconds."\n\nSCENE 5 - CTA (45-55s)\n[Back to avatar, pointing gesture]\nAvatar: "Link is in my bio. Go try Prompt Architect right now -- you will thank me later. Drop a comment if you build something cool!"\n[Text overlay: "Link in bio" with arrow]\n[Background music: upbeat, 20% volume throughout]',
+  video_script: 'SCENE 1 - HOOK (0-3s)\n[Close-up shot, surprised expression]\nAvatar: "Wait -- you can build a FULL AI app without writing a single line of code?"\n[Text overlay: "Build an AI App in 60s?"]\n[Motion: slight zoom in]\n\nSCENE 2 - DISCOVERY (3-15s)\n[Screen recording: Architect landing page]\nAvatar (voiceover): "So I found this tool called Architect, and honestly, it blew my mind. I literally typed in what I wanted -- a customer support chatbot -- hit generate..."\n[Show: typing prompt into the tool]\n\nSCENE 3 - DEMO (15-35s)\n[Split screen: avatar left, screen recording right]\nAvatar: "...and boom. It gave me a working app with a clean UI, connected to an AI agent, ready to deploy. No backend setup, no API headaches, no config files."\n[Show: step-by-step build process, generated app appearing]\n\nSCENE 4 - RESULT (35-45s)\n[Full-screen montage of generated app UI]\n[Quick cuts between different screens and features]\nAvatar (voiceover): "Just describe your idea and it builds the whole thing. The AI handles the logic, the routing, everything. I even customized the look in like 10 seconds."\n\nSCENE 5 - CTA (45-55s)\n[Back to avatar, pointing gesture]\nAvatar: "Link is in my bio. Go try Architect right now -- you will thank me later. Drop a comment if you build something cool!"\n[Text overlay: "Link in bio" with arrow]\n[Background music: upbeat, 20% volume throughout]',
   total_duration: '55 seconds',
   scene_count: '5',
 }
@@ -96,8 +96,8 @@ const SAMPLE_HISTORY: HistoryItem[] = [
     scriptData: {
       title: 'From Drowning in Tickets to 80% Automation',
       hook: 'This startup was losing $50K a month on support tickets. Here is how they fixed it overnight.',
-      body: 'They were a 10-person SaaS company getting 500+ tickets a day. Their support team was burned out. Then they tried Prompt Architect to build an AI agent that handles tier-1 support automatically...',
-      cta: 'Want the same results? Check the link in bio for Prompt Architect.',
+      body: 'They were a 10-person SaaS company getting 500+ tickets a day. Their support team was burned out. Then they tried Architect to build an AI agent that handles tier-1 support automatically...',
+      cta: 'Want the same results? Check the link in bio for Architect.',
       estimated_duration: '40-50 seconds',
     },
     promptData: null,
@@ -445,7 +445,7 @@ function StudioTab({
             <textarea
               value={contentIdea}
               onChange={(e) => setContentIdea(e.target.value)}
-              placeholder="Describe your content idea for Prompt Architect..."
+              placeholder="Describe your content idea for Architect..."
               rows={4}
               className="w-full rounded-[0.875rem] border border-border bg-background/60 px-4 py-3 text-sm leading-relaxed text-foreground placeholder:text-muted-foreground resize-none focus:outline-none focus:ring-2 focus:ring-ring/40 transition-all"
             />
@@ -495,8 +495,16 @@ function StudioTab({
           </button>
 
           {errorMessage && (
-            <div className="rounded-[0.875rem] bg-destructive/10 border border-destructive/20 px-4 py-3 text-sm text-destructive">
-              {errorMessage}
+            <div className="rounded-[0.875rem] bg-destructive/10 border border-destructive/20 px-4 py-3 text-sm text-destructive flex items-center justify-between gap-3">
+              <span>{errorMessage}</span>
+              <button
+                onClick={onGenerate}
+                disabled={isGenerating}
+                className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-destructive/15 hover:bg-destructive/25 text-destructive text-xs font-medium transition-colors"
+              >
+                <FiRefreshCw size={12} />
+                Retry
+              </button>
             </div>
           )}
         </GlassCard>
@@ -779,8 +787,16 @@ function VideoScriptTab({
       </div>
 
       {errorMessage && (
-        <div className="rounded-[0.875rem] bg-destructive/10 border border-destructive/20 px-4 py-3 text-sm text-destructive text-center">
-          {errorMessage}
+        <div className="rounded-[0.875rem] bg-destructive/10 border border-destructive/20 px-4 py-3 text-sm text-destructive flex items-center justify-center gap-3">
+          <span>{errorMessage}</span>
+          <button
+            onClick={onGenerate}
+            disabled={isGenerating}
+            className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-destructive/15 hover:bg-destructive/25 text-destructive text-xs font-medium transition-colors"
+          >
+            <FiRefreshCw size={12} />
+            Retry
+          </button>
         </div>
       )}
 
@@ -1193,7 +1209,7 @@ export default function Page() {
     }
   }
 
-  // ── Generate Script ────────────────────────────────────────────────────────
+  // ── Generate Script (with automatic retry) ─────────────────────────────────
   const handleGenerateScript = async () => {
     if (!contentIdea.trim() || isGeneratingScript) return
 
@@ -1207,32 +1223,43 @@ export default function Page() {
 
     const message = `Content Type: ${contentType}\n\nContent Idea: ${contentIdea}${notes ? `\n\nAdditional Notes: ${notes}` : ''}`
 
-    try {
-      const result = await callAIAgent(message, SCRIPT_AGENT_ID)
+    const maxRetries = 2
+    let lastError = ''
 
-      if (result.success) {
-        const data = result?.response?.result
-        const parsed = parseScriptResponse(data as Record<string, unknown> | string)
-        if (parsed) {
-          setScriptData(parsed)
-          setEditableHook(parsed.hook)
-          setEditableBody(parsed.body)
-          setEditableCta(parsed.cta)
+    for (let attempt = 0; attempt <= maxRetries; attempt++) {
+      try {
+        if (attempt > 0) await new Promise((r) => setTimeout(r, 1500 * attempt))
+
+        const result = await callAIAgent(message, SCRIPT_AGENT_ID)
+
+        if (result.success) {
+          const data = result?.response?.result
+          const parsed = parseScriptResponse(data as Record<string, unknown> | string)
+          if (parsed) {
+            setScriptData(parsed)
+            setEditableHook(parsed.hook)
+            setEditableBody(parsed.body)
+            setEditableCta(parsed.cta)
+            setIsGeneratingScript(false)
+            setActiveAgentId(null)
+            return
+          } else {
+            lastError = 'Could not parse script response.'
+          }
         } else {
-          setScriptErrorMessage('Could not parse script response. Please try again.')
+          lastError = result?.error ?? 'Failed to generate script.'
         }
-      } else {
-        setScriptErrorMessage(result?.error ?? 'Failed to generate script. Please try again.')
+      } catch {
+        lastError = 'A network error occurred.'
       }
-    } catch {
-      setScriptErrorMessage('An unexpected error occurred. Please try again.')
     }
 
+    setScriptErrorMessage(`${lastError} Please try again.`)
     setIsGeneratingScript(false)
     setActiveAgentId(null)
   }
 
-  // ── Revise Script ──────────────────────────────────────────────────────────
+  // ── Revise Script (with automatic retry) ───────────────────────────────────
   const handleReviseScript = async () => {
     if (!revisionInput.trim() || isRevising || !scriptData) return
 
@@ -1242,28 +1269,39 @@ export default function Page() {
 
     const message = `REVISION REQUEST\n\nCurrent Script:\nTitle: ${scriptData.title}\nHook: ${editableHook}\nBody: ${editableBody}\nCTA: ${editableCta}\n\nUser Feedback: ${revisionInput}\n\nPlease revise the script based on the feedback above. Keep the same JSON output format.`
 
-    try {
-      const result = await callAIAgent(message, SCRIPT_AGENT_ID)
+    const maxRetries = 2
+    let lastError = ''
 
-      if (result.success) {
-        const data = result?.response?.result
-        const parsed = parseScriptResponse(data as Record<string, unknown> | string)
-        if (parsed) {
-          setScriptData(parsed)
-          setEditableHook(parsed.hook)
-          setEditableBody(parsed.body)
-          setEditableCta(parsed.cta)
-          setRevisionInput('')
+    for (let attempt = 0; attempt <= maxRetries; attempt++) {
+      try {
+        if (attempt > 0) await new Promise((r) => setTimeout(r, 1500 * attempt))
+
+        const result = await callAIAgent(message, SCRIPT_AGENT_ID)
+
+        if (result.success) {
+          const data = result?.response?.result
+          const parsed = parseScriptResponse(data as Record<string, unknown> | string)
+          if (parsed) {
+            setScriptData(parsed)
+            setEditableHook(parsed.hook)
+            setEditableBody(parsed.body)
+            setEditableCta(parsed.cta)
+            setRevisionInput('')
+            setIsRevising(false)
+            setActiveAgentId(null)
+            return
+          } else {
+            lastError = 'Could not parse revised script response.'
+          }
         } else {
-          setScriptErrorMessage('Could not parse revised script response. Please try again.')
+          lastError = result?.error ?? 'Failed to revise script.'
         }
-      } else {
-        setScriptErrorMessage(result?.error ?? 'Failed to revise script. Please try again.')
+      } catch {
+        lastError = 'A network error occurred during revision.'
       }
-    } catch {
-      setScriptErrorMessage('An unexpected error occurred during revision. Please try again.')
     }
 
+    setScriptErrorMessage(`${lastError} Please try again.`)
     setIsRevising(false)
     setActiveAgentId(null)
   }
@@ -1300,7 +1338,7 @@ export default function Page() {
     setActiveTab('prompt')
   }
 
-  // ── Generate HeyGen Video Script ───────────────────────────────────────────
+  // ── Generate HeyGen Video Script (with automatic retry) ────────────────────
   const handleGeneratePrompt = async () => {
     if (!scriptData || scriptStatus !== 'approved' || isGeneratingPrompt) return
 
@@ -1311,44 +1349,60 @@ export default function Page() {
 
     const approvedScript = `Title: ${scriptData.title}\n\nHOOK:\n${editableHook}\n\nBODY:\n${editableBody}\n\nCTA:\n${editableCta}\n\nEstimated Duration: ${scriptData.estimated_duration ?? ''}`
 
-    try {
-      const result = await callAIAgent(approvedScript, HEYGEN_AGENT_ID)
+    const maxRetries = 2
+    let lastError = ''
 
-      if (result.success) {
-        let data = result?.response?.result
-        if (typeof data === 'string') {
-          try {
-            data = JSON.parse(data)
-          } catch {
-            // leave as is
-          }
-        }
-        const dataObj = data as Record<string, unknown> | undefined
-        const parsed: VideoScriptData = {
-          video_script: typeof dataObj?.video_script === 'string' ? dataObj.video_script : '',
-          total_duration: typeof dataObj?.total_duration === 'string' ? dataObj.total_duration : '',
-          scene_count: typeof dataObj?.scene_count === 'string' ? dataObj.scene_count : '',
-        }
-        setVideoScriptData(parsed)
+    for (let attempt = 0; attempt <= maxRetries; attempt++) {
+      try {
+        if (attempt > 0) await new Promise((r) => setTimeout(r, 1500 * attempt))
 
-        // Update history entry
-        const updatedHistory = history.map((item) => {
-          if (
-            item.contentIdea === contentIdea &&
-            item.status === 'approved'
-          ) {
-            return { ...item, promptData: parsed, status: 'prompt_generated' as const }
+        const result = await callAIAgent(approvedScript, HEYGEN_AGENT_ID)
+
+        if (result.success) {
+          let data = result?.response?.result
+          if (typeof data === 'string') {
+            try {
+              data = JSON.parse(data)
+            } catch {
+              // leave as is
+            }
           }
-          return item
-        })
-        saveHistory(updatedHistory)
-      } else {
-        setPromptErrorMessage(result?.error ?? 'Failed to generate video script. Please try again.')
+          const dataObj = data as Record<string, unknown> | undefined
+          const parsed: VideoScriptData = {
+            video_script: typeof dataObj?.video_script === 'string' ? dataObj.video_script : '',
+            total_duration: typeof dataObj?.total_duration === 'string' ? dataObj.total_duration : '',
+            scene_count: typeof dataObj?.scene_count === 'string' ? dataObj.scene_count : '',
+          }
+
+          if (parsed.video_script) {
+            setVideoScriptData(parsed)
+
+            // Update history entry
+            const updatedHistory = history.map((item) => {
+              if (
+                item.contentIdea === contentIdea &&
+                item.status === 'approved'
+              ) {
+                return { ...item, promptData: parsed, status: 'prompt_generated' as const }
+              }
+              return item
+            })
+            saveHistory(updatedHistory)
+            setIsGeneratingPrompt(false)
+            setActiveAgentId(null)
+            return
+          } else {
+            lastError = 'Video script was empty.'
+          }
+        } else {
+          lastError = result?.error ?? 'Failed to generate video script.'
+        }
+      } catch {
+        lastError = 'A network error occurred.'
       }
-    } catch {
-      setPromptErrorMessage('An unexpected error occurred. Please try again.')
     }
 
+    setPromptErrorMessage(`${lastError} Please try again.`)
     setIsGeneratingPrompt(false)
     setActiveAgentId(null)
   }
