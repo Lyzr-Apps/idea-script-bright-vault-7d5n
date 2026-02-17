@@ -72,9 +72,9 @@ const SAMPLE_SCRIPT: ScriptData = {
 }
 
 const SAMPLE_PROMPT: VideoScriptData = {
-  video_script: 'SCENE 1 - HOOK (0-3s)\n[Close-up shot, surprised expression]\nAvatar: "Wait -- you can build a FULL AI app without writing a single line of code?"\n[Text overlay: "Build an AI App in 60s?"]\n[Motion: slight zoom in]\n\nSCENE 2 - DISCOVERY (3-15s)\n[Screen recording: Architect landing page]\nAvatar (voiceover): "So I found this tool called Architect, and honestly, it blew my mind. I literally typed in what I wanted -- a customer support chatbot -- hit generate..."\n[Show: typing prompt into the tool]\n\nSCENE 3 - DEMO (15-35s)\n[Split screen: avatar left, screen recording right]\nAvatar: "...and boom. It gave me a working app with a clean UI, connected to an AI agent, ready to deploy. No backend setup, no API headaches, no config files."\n[Show: step-by-step build process, generated app appearing]\n\nSCENE 4 - RESULT (35-45s)\n[Full-screen montage of generated app UI]\n[Quick cuts between different screens and features]\nAvatar (voiceover): "Just describe your idea and it builds the whole thing. The AI handles the logic, the routing, everything. I even customized the look in like 10 seconds."\n\nSCENE 5 - CTA (45-55s)\n[Back to avatar, pointing gesture]\nAvatar: "Link is in my bio. Go try Architect right now -- you will thank me later. Drop a comment if you build something cool!"\n[Text overlay: "Link in bio" with arrow]\n[Background music: upbeat, 20% volume throughout]',
+  video_script: 'Style: Use minimal, clean styled visuals. Blue, black, and white as main colors. Leverage motion graphics as B-rolls and A-roll overlays. Use AI videos when necessary. When real-world footage is needed, use Stock Media. Include an intro sequence, outro sequence, and chapter breaks using Motion Graphics.\n\nScene 1: Hook (A-roll with Motion Graphics overlay)\nVisual: Avatar on clean dark background, text overlay animates in with "Build an AI App in 60s?"\nVO: "Wait -- you can build a FULL AI app without writing a single line of code? Let me show you how I did it in under a minute."\nDuration: 5 seconds\n\nScene 2: Discovery (A-roll + Screen Recording B-roll)\nVisual: Avatar speaking, then cut to screen recording of Architect landing page with animated callouts highlighting key features\nVO: "So I found this tool called Architect, and honestly, it blew my mind. I literally typed in what I wanted -- a customer support chatbot -- hit generate..."\nDuration: 12 seconds\n\nScene 3: Demo (Motion Graphics B-roll)\nVisual: Full-screen animated walkthrough showing the build process -- typing a prompt, UI generating, components appearing. Use motion graphics overlays for step labels.\nVO: "...and boom. It gave me a working app with a clean UI, connected to an AI agent, ready to deploy. No backend setup, no API headaches, no config files."\nDuration: 15 seconds\n\nScene 4: Result (AI-Generated B-roll + Motion Graphics overlay)\nVisual: AI-generated visuals of a polished app interface with animated feature callouts. Quick cuts between different screens.\nVO: "Just describe your idea and it builds the whole thing. The AI handles the logic, the routing, everything. I even customized the look in like 10 seconds."\nDuration: 12 seconds\n\nScene 5: CTA (A-roll with Motion Graphics overlay)\nVisual: Avatar, confident and enthusiastic delivery. Animated text overlay: "Link in Bio" with arrow pointing down. Brand colors pulse subtly.\nVO: "Link is in my bio. Go try Architect right now -- you will thank me later. Drop a comment if you build something cool!"\nDuration: 8 seconds\n\nScene 6: End Card (Motion Graphics)\nVisual: Architect logo animation with tagline. Clean fade to brand colors.\nDuration: 3 seconds',
   total_duration: '55 seconds',
-  scene_count: '5',
+  scene_count: '6',
 }
 
 const SAMPLE_HISTORY: HistoryItem[] = [
@@ -842,12 +842,98 @@ function VideoScriptTab({
                 )}
               </div>
 
-              {/* Video Script Text */}
-              {videoScriptData.video_script && (
-                <div className="rounded-[0.875rem] bg-muted/60 border border-border/50 p-4 font-mono text-sm text-foreground/85 leading-relaxed whitespace-pre-wrap">
-                  {videoScriptData.video_script}
-                </div>
-              )}
+              {/* Video Script - Scene-by-Scene Render */}
+              {videoScriptData.video_script && (() => {
+                const raw = videoScriptData.video_script
+                // Split into blocks by "Scene N:" pattern
+                const blocks = raw.split(/(?=Scene \d+:)/gi)
+                const styleBlock = blocks.length > 0 && !blocks[0].match(/^Scene \d+:/i) ? blocks.shift()?.trim() : null
+                const scenes = blocks.filter(b => b.trim().length > 0)
+
+                return (
+                  <div className="space-y-4">
+                    {/* Style directive */}
+                    {styleBlock && (
+                      <div className="rounded-[0.875rem] bg-primary/5 border border-primary/15 p-4">
+                        <div className="flex items-center gap-2 mb-2">
+                          <FiTarget size={13} className="text-primary" />
+                          <span className="text-xs font-semibold uppercase tracking-wider text-primary">Visual Style</span>
+                        </div>
+                        <p className="text-sm text-foreground/80 leading-relaxed">{styleBlock.replace(/^Style:\s*/i, '')}</p>
+                      </div>
+                    )}
+
+                    {/* Scenes */}
+                    {scenes.map((scene, idx) => {
+                      const lines = scene.trim().split('\n').filter(l => l.trim())
+                      const headerLine = lines[0] || ''
+                      const headerMatch = headerLine.match(/^Scene \d+:\s*(.+)/i)
+                      const sceneTitle = headerMatch ? headerMatch[1] : headerLine
+                      const rest = lines.slice(1)
+
+                      // Parse VO, Visual, Duration
+                      const voLines: string[] = []
+                      const visualLines: string[] = []
+                      let duration = ''
+                      const otherLines: string[] = []
+
+                      rest.forEach(line => {
+                        const l = line.trim()
+                        if (l.match(/^VO:\s*/i)) {
+                          voLines.push(l.replace(/^VO:\s*/i, '').replace(/^"|"$/g, ''))
+                        } else if (l.match(/^Visual:\s*/i)) {
+                          visualLines.push(l.replace(/^Visual:\s*/i, ''))
+                        } else if (l.match(/^Duration:\s*/i)) {
+                          duration = l.replace(/^Duration:\s*/i, '')
+                        } else {
+                          otherLines.push(l)
+                        }
+                      })
+
+                      return (
+                        <div key={idx} className="rounded-[0.875rem] bg-muted/40 border border-border/50 overflow-hidden">
+                          {/* Scene header */}
+                          <div className="flex items-center justify-between px-4 py-3 bg-muted/60 border-b border-border/40">
+                            <div className="flex items-center gap-2.5">
+                              <span className="flex items-center justify-center w-6 h-6 rounded-full bg-primary/15 text-primary text-xs font-bold">{idx + 1}</span>
+                              <span className="text-sm font-semibold text-foreground tracking-tight">{sceneTitle}</span>
+                            </div>
+                            {duration && (
+                              <Badge variant="outline" className="text-[10px]">
+                                <FiClock size={10} className="mr-1" />
+                                {duration}
+                              </Badge>
+                            )}
+                          </div>
+
+                          <div className="p-4 space-y-3">
+                            {/* Visual direction */}
+                            {visualLines.length > 0 && (
+                              <div>
+                                <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Visual</span>
+                                <p className="mt-1 text-sm text-foreground/75 leading-relaxed">{visualLines.join(' ')}</p>
+                              </div>
+                            )}
+
+                            {/* Voiceover */}
+                            {voLines.length > 0 && (
+                              <div className="rounded-lg bg-background/60 border border-border/30 px-3.5 py-2.5">
+                                <span className="text-[10px] font-semibold uppercase tracking-wider text-primary/70">Voiceover</span>
+                                <p className="mt-1 text-sm text-foreground leading-relaxed italic">{voLines.join(' ')}</p>
+                              </div>
+                            )}
+
+                            {/* Other lines */}
+                            {otherLines.length > 0 && (
+                              <p className="text-xs text-muted-foreground leading-relaxed">{otherLines.join(' ')}</p>
+                            )}
+                          </div>
+                        </div>
+                      )
+                    })}
+                  </div>
+                )
+              })()}
             </div>
           </ScrollArea>
         </GlassCard>
